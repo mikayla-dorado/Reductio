@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Runtime.CompilerServices;
+
 List<Product> products = new List<Product>()
 {
     new Product()
@@ -7,42 +9,48 @@ List<Product> products = new List<Product>()
         Name = "Hat",
         Price = 7.99M,
         Available = true,
-        ProductTypeId = 1
+        ProductTypeId = 1,
+        DateStocked = new DateTime(2022, 5,30)
     },
     new Product()
     {
         Name = "Wand",
         Price = 10.99M,
         Available = true,
-        ProductTypeId = 4
+        ProductTypeId = 4,
+        DateStocked = new DateTime(2022, 3,14)
     },
     new Product()
     {
         Name = "Scarves",
         Price = 4.99M,
         Available = false,
-        ProductTypeId = 1
+        ProductTypeId = 1,
+        DateStocked = new DateTime(2022, 11,10)
     },
     new Product()
     {
         Name = "Gloves",
         Price = 6.99M,
         Available = true,
-        ProductTypeId = 1
+        ProductTypeId = 1,
+        DateStocked = new DateTime(2023, 4, 2)
     },
     new Product()
     {
         Name = "Cards",
         Price = 12.99M,
         Available = true,
-        ProductTypeId = 3
+        ProductTypeId = 3,
+        DateStocked = new DateTime(2022, 2,20)
     },
     new Product()
     {
         Name = "Trick Fingers",
         Price = 14.99M,
         Available = false,
-        ProductTypeId = 1
+        ProductTypeId = 1,
+        DateStocked = new DateTime(2022, 8,19)
     }
 };
 
@@ -85,7 +93,8 @@ while (choice != "0")
             1. View All Products
             2. Add a Product to Inventory
             3. Delete a Product from Inventory
-            4. Update Product Details");
+            4. Update Product Details
+            5. Look up Products by Type");
     choice = Console.ReadLine();
     Console.Clear();
     //add functionality for main menu
@@ -105,6 +114,9 @@ while (choice != "0")
             break;
         case "4":
             UpdateProduct();
+            break;
+        case "5":
+            SearchByType();
             break;
         default:
             Console.WriteLine("Invalid input. Please choose a valid option.");
@@ -127,7 +139,7 @@ void ListProducts()
     Console.WriteLine("Products:");
     for (int i = 0; i < products.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {products[i].Name}");
+        Console.WriteLine($"{i + 1}. {products[i].Name} has been on the shelf for: {products[i].DaysOnShelf}");
     }
 }
 
@@ -277,5 +289,20 @@ void UpdateProduct()
     {
         Console.WriteLine(ex);
         Console.WriteLine("Uh-oh! Something went wrong.");
+    }
+}
+
+void SearchByType()
+{
+    Console.WriteLine("Enter a product type to view products.");
+    //displays list of product types
+    ListProductTypeIds();
+
+    int userEntered = int.Parse(Console.ReadLine());
+    List<Product> productsMatchingChosen = products.Where(p => p.ProductTypeId == userEntered).ToList();
+
+    foreach (Product product in productsMatchingChosen)
+    {
+        Console.WriteLine($"{product.Name} - {product.Price} - Available: {product.Available}");
     }
 }
